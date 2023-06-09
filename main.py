@@ -1,37 +1,49 @@
 import pytube
+from pytube import exceptions
 import os
 
 
 def url_youtube():
-    url_yt = pytube.YouTube(input('Введите сслыку на видео: '))
-    return url_yt
+    url = input('Введите сслыку на видео:')
+    exceptions_dict = {
+        'RegexMatchError': f'Ссылка {url} не работает',
+        'LiveStreamError': f'Можно скачать звук только с завершённых стримов',
+        'MembersOnly': f'Видео доступно только для платных подписчиков'
+    }
+    try:
+        url_yt = pytube.YouTube(url)
+        audio = url_yt.streams.filter(
+            only_audio=True,
+            file_extension='mp4'
+        )[0]
+    except pytube.exceptions.RegexMatchError:
+        print(exceptions_dict['RegexMatchError'])
+    except pytube.exceptions.LiveStreamError:
+        print(exceptions_dict['LiveStreamError'])
+    except pytube.exceptions.MembersOnly:
+        print(exceptions_dict['MembersOnly'])
+    else:
+        print(f'Ссылка {url} работает')
+        return audio
 
 
 def address():
-    address = input('Введите путь к папке, куда будет сохранено аудио: ')
-    return address
+    path = input('Введите путь к директории, куда будет сохранено аудио:')
+    if os.path.exists(path):
+        if os.path.isdir(path):
+            return path
+        else:
+            print(f'{path} не является директорией')
+    else:
+        print(f'Директории {path} не существует')
 
 
 def main():
     try:
-        audio = url_youtube().streams.filter(only_audio=True, file_extension='mp4')[0]
-    except pytube.exceptions.RegexMatchError:
-        print('ссылка не работает')
-    else:
-        dir = address()
-        if os.path.exists(dir):
-            if os.path.isdir(dir):
-                audio.download(dir)
-                print('done, congrats!!!!!\n'
-                      'u r great programmer!!!!')
-            else:
-                print('указанный путь не является директорией')
-        else:
-            print('директории не существует')
+        url_youtube().download(address())
+    except AttributeError:
+        print('Что-то пошло не так')
 
 
 if __name__ == '__main__':
     main()
-
-
-
