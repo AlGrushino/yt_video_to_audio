@@ -1,4 +1,5 @@
 import pytube
+import os
 
 
 def url_youtube():
@@ -12,10 +13,21 @@ def address():
 
 
 def main():
-    audio = url_youtube().streams.filter(only_audio=True, file_extension='mp4')[0]
-    audio.download(address())
-    print('done, congrats!!!!!\n'
-          'u r greate programmer!!!!')
+    try:
+        audio = url_youtube().streams.filter(only_audio=True, file_extension='mp4')[0]
+    except pytube.exceptions.RegexMatchError:
+        print('ссылка не работает')
+    else:
+        dir = address()
+        if os.path.exists(dir):
+            if os.path.isdir(dir):
+                audio.download(dir)
+                print('done, congrats!!!!!\n'
+                      'u r great programmer!!!!')
+            else:
+                print('указанный путь не является директорией')
+        else:
+            print('директории не существует')
 
 
 if __name__ == '__main__':
