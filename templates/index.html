@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+    <div class="title">
+        <h1>Приложение для скачивания аудиодорожки с YouTube</h1>
+    </div>
+	<h3 align="center">Инструкция</h3>
+<div align="center">
+	<table id="instruction">
+       	    <tr id="row">
+	        <td>Инструкция по использованию приложения состоит из 2 шагов:</td> </tr>
+       	    <tr id="row">
+	        <td>1 шаг. Вставить ссылку на видео.</td> </tr>
+       	    <tr id="row">
+		 	<td>2 шаг. Вставить адрес каталога, куда будет скачана аудио-дорожка.</td> </tr>
+	</table>
+</div>
+<div align="center">
+    <p><a class="btn" href="/download_audio" target="_blank">Скачать аудио-дорожку.</a></p>
+</div>
+
+{% endblock %}
